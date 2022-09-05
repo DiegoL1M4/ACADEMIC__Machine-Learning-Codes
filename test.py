@@ -18,6 +18,8 @@ dataBaseName = "iris" # iris | column | artificial
 hitRateList = []
 for k in range(totalExe):
     data = General.getData(dataBaseName)
+    
+    General.plotDecisionSurface(General.twoCoordsData(data))
 
     if(algorithm == "KNN"):
         dataPart = KNN.train(data, dataBasePercentage)

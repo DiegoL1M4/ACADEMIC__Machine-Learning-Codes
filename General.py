@@ -1,18 +1,12 @@
 import math
 import random
 import os
-from this import d
-from matplotlib.pyplot import axis
+import pandas as pd
 import numpy as np
 import seaborn as sns
+import matplotlib.pyplot as plt
 
 from ntpath import join
-
-import matplotlib.pyplot as plt
-from sklearn.datasets import make_classification
-from sklearn.metrics import plot_confusion_matrix
-from sklearn.model_selection import train_test_split
-from sklearn.svm import SVC
 
 class General:
     def getData(dataBaseName):
@@ -129,7 +123,7 @@ class General:
         newBase = []
         for k in data:
             newBase.append([k[0][0], k[0][1], k[1]])
-        return newBase
+        return pd.DataFrame(np.array(newBase), columns=['A', 'B', 'Class'])
 
     def plotDecisionSurface(decisionData):
         scatter = sns.scatterplot(x="A", y="B", hue="Class", data=decisionData)
