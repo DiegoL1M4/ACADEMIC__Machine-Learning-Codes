@@ -13,7 +13,6 @@ class General:
         current_dir = os.path.dirname(os.path.realpath(__file__))
         file = open(join(current_dir, 'data/' + dataBaseName + '.data'), 'r')
         data = []
-        coordsData = []
 
         # Read file
         row = file.readline()
@@ -32,24 +31,25 @@ class General:
                 else:
                     sample[1] = e #type
 
-            coordsData.append(sample[0])
             data.append(sample)
             row = file.readline()
 
-        # Normalization
+        # Shuffle
+        random.shuffle(data)
+        return data
+
+    def normalization(data):
+        coordsData = []
+        for sample in data:
+            coordsData.append(sample[0])
+
         minArray = np.matrix(coordsData).min(axis=0)
         maxArray = np.matrix(coordsData).max(axis=0)
-        for k in range(len(data[0][0])):
-            min = minArray.item(k)
-            max = maxArray.item(k)
-            print()
 
         for sample in data:
             for k in range(len(sample[0])):
                 sample[0][k] = (sample[0][k] - minArray.item(k)) / (maxArray.item(k) - minArray.item(k))
 
-        # Shuffle
-        random.shuffle(data)
         return data
 
     def isNumber(value):
@@ -116,18 +116,68 @@ class General:
         heatmap.set_xlabel('Valores Previstos')
         heatmap.set_ylabel('Valores Reais')
 
-        plt.savefig("ConfusionMatrix " + str(order + 1) + ".png")
+        plt.savefig("graphics/ConfusionMatrix " + str(order + 1) + ".png")
         plt.clf()
 
     def twoCoordsData(data):
         newBase = []
         for k in data:
             newBase.append([k[0][0], k[0][1], k[1]])
-        return pd.DataFrame(np.array(newBase), columns=['A', 'B', 'Class'])
+        return newBase
+        # return pd.DataFrame(np.array(newBase), columns=['A', 'B', 'Class'])
 
     def plotDecisionSurface(decisionData):
-        scatter = sns.scatterplot(x="A", y="B", hue="Class", data=decisionData)
-        scatter.set_title('Superfície de Decisão\n')
+        # for k in decisionData:
+        #     if(k[2] == 'A'):
+        #         color = 'blue'
+        #     else:
+        #         color = 'red'
+        #     plt.scatter(float(k[0]), float(k[1]), c = color)
+
+        # plt.axis([-0.05, 1.05, -0.05, 1.05])
+        # plt.grid(True)
+        # plt.savefig('Artificial1.png')
+        # plt.show()
+
+        data = X_test_2d[:][:].values
+
+        x_min, x_max = data[:, 0].min() - 0.1, data[:,0].max() + 0.1
+        y_min, y_max = data[:, 1].min() - 0.1, data[:, 1].max() + 0.1
+
+        xx, yy = np.meshgrid(np.linspace(x_min,x_max, 100),
+        np.linspace(y_min, y_max, 100))
+
+        x_in = np.c_[xx.ravel(), yy.ravel()]
+
+        y_pred = [[dmc_model.predict(x) for x in x_in]]
+        for i, y in enumerate(y_pred[0]):
+            if y == 'Iris-setosa':
+                y_pred[0][i] = 1
+            elif y == 'Iris-virginica':
+                y_pred[0][i] = 2
+            else:
+                y_pred[0][i] = 3
+
+        y_pred = np.round(y_pred).reshape(xx.shape)
+
+        plt.contourf(xx, yy, y_pred, cmap=plt.cm.RdYlBu, alpha=0.7 )
+
+        plt.xlim(xx.min(), xx.max())
+        plt.ylim(yy.min(), yy.max())
+
+        dmc_y_pred = np.array([dmc_model.predict(x) for x in X_test_2d.values])
+
+        setosa = np.where(dmc_y_pred == 'Iris-setosa')
+        virginica = np.where(dmc_y_pred == 'Iris-virginica')
+        versicolor = np.where(dmc_y_pred == 'Iris-versicolor')
+
+        plt.scatter(data[setosa, 0], data[setosa, 1],
+                    color='red', marker='o', label='setosa')
+        plt.scatter(data[versicolor, 0], data[versicolor, 1],
+                    color='blue', marker='X', label='versicolor')
+        plt.scatter(data[virginica, 0], data[virginica, 1],
+                    color='green', marker='P', label='virginica')
+
         plt.show()
 
         return 0

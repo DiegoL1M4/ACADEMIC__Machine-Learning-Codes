@@ -17,7 +17,7 @@ def generateData(onlyGraphic):
     nodes = []
 
     if(onlyGraphic):
-        file = open(join(current_dir, 'artificial.data'), 'r')
+        file = open(join(current_dir, 'artificial1.data'), 'r')
         
         row = file.readline()
         while(row != '' and row != '\n'):
@@ -35,23 +35,30 @@ def generateData(onlyGraphic):
     
     if(not onlyGraphic):
         file = open(join(current_dir, 'artificial.data'), 'w')
-        for i in range(15):
-            x = round(np.random.uniform(0, 0.4), 2)
-            y = round(np.random.uniform(0, 0.9), 2)
+        for i in range(6):
+            x = round(np.random.uniform(0, 0.25), 2)
+            y = round(np.random.uniform(0.6, 0.9), 2)
 
             file.write(str(x) + "," + str(y) + ",A\n")
             nodes.append([x, y, 'A'])
 
-        for i in range(15):
-            x = round(np.random.uniform(0, 0.9), 2)
-            y = round(np.random.uniform(0, 0.4), 2)
+        for i in range(8):
+            x = round(np.random.uniform(0.01, 0.3), 2)
+            y = round(np.random.uniform(0.01, 0.3), 2)
+
+            file.write(str(x) + "," + str(y) + ",A\n")
+            nodes.append([x, y, 'A'])
+
+        for i in range(6):
+            x = round(np.random.uniform(0.6, 1), 2)
+            y = round(np.random.uniform(0, 0.25), 2)
 
             file.write(str(x) + "," + str(y) + ",A\n")
             nodes.append([x, y, 'A'])
 
         for i in range(10):
-            x = round(np.random.uniform(0.55, 1), 2)
-            y = round(np.random.uniform(0.55, 1), 2)
+            x = round(np.random.uniform(0.64, 0.9), 2)
+            y = round(np.random.uniform(0.64, 0.9), 2)
 
             file.write(str(x) + "," + str(y) + ",B\n")
             nodes.append([x, y, 'B'])
@@ -70,5 +77,5 @@ for k in experiment:
 
 plt.axis([-0.05, 1.05, -0.05, 1.05])
 plt.grid(True)
-plt.savefig('Artificial.png')
+plt.savefig('Artificial1.png')
 plt.show()
