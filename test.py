@@ -7,10 +7,10 @@ from DMC import DMC
 
 # Variables
 dataBasePercentage = 0.8
-totalExe = 1
+totalExe = 20
 
-K_value = 4
-algorithm = "DMC" # KNN | DMC
+K_value = 5
+algorithm = "KNN" # KNN | DMC
 dataBaseName = "iris" # iris | column | artificial1
 
 
@@ -19,7 +19,7 @@ hitRateList = []
 for k in range(totalExe):
     data = General.normalization(General.getData(dataBaseName))
     
-    General.plotDecisionSurface(General.twoCoordsData(data))
+    # General.plotDecisionSurface(General.twoCoordsData(data))
 
     if(algorithm == "KNN"):
         dataPart = KNN.train(data, dataBasePercentage)
@@ -28,15 +28,17 @@ for k in range(totalExe):
         dataPart = DMC.train(data, dataBasePercentage)
         predictResult = DMC.predict(dataPart[0], dataPart[1])
 
-    General.plotConfusionMatrix(General.confusionMatrix(dataPart[0], predictResult), k)
-
+    print("\nPredição " + str(k + 1) + ":")
     print(predictResult)
+    
+    General.plotConfusionMatrix(General.confusionMatrix(dataPart[0], predictResult), k)
 
     hitRateList.append(General.hitRate(predictResult))
 
     newBase = General.twoCoordsData(predictResult)
 
+print("\nLista das taxas de acerto:")
 print(hitRateList)
 
-print("Acurácia: " + str(General.average(hitRateList)))
+print("\nAcurácia: " + str(General.average(hitRateList)))
 print("Desvio Padrão: " + str(General.standardDeviation(hitRateList)))

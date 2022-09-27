@@ -19,15 +19,13 @@ class DMC:
                 sample.append('')
                 dataToPredict.append(sample)
             counter += 1
-        
-        return [dataTrained, dataToPredict]
-            
-    def predict(dataBase, dataPredict):
-        dataMean = []
-        dataBaseSorted = sorted(dataBase, key=lambda case: case[1])
 
+        # Definition of centroids
+        dataMean = []
+        dataBaseSorted = sorted(dataTrained, key=lambda case: case[1])
         typing = ''
         collection = []
+
         for coords in dataBaseSorted:
             if(typing == ''):
                 typing = coords[1]
@@ -38,9 +36,12 @@ class DMC:
             collection.append(coords[0])
         dataMean.append([np.mean(collection, axis=0), typing])
         
+        return [dataMean, dataToPredict]
+            
+    def predict(dataBase, dataPredict):
         for sample in dataPredict:
             distance = ''
-            for test in dataMean:
+            for test in dataBase:
                 distanceCalc = General.calcDistance(test[0], sample[0])
                 if(distance == '' or distanceCalc < distance):
                     distance = distanceCalc

@@ -123,62 +123,51 @@ class General:
         newBase = []
         for k in data:
             newBase.append([k[0][0], k[0][1], k[1]])
-        return newBase
-        # return pd.DataFrame(np.array(newBase), columns=['A', 'B', 'Class'])
+        
+        return pd.DataFrame(newBase, columns=['A', 'B', 'Class'])
 
     def plotDecisionSurface(decisionData):
-        # for k in decisionData:
-        #     if(k[2] == 'A'):
-        #         color = 'blue'
+        # test = decisionData.drop(decisionData.columns[-1:], axis=1)
+        # data = test[:][:].values
+
+        # x_min, x_max = data[:, 0].min() - 0.1, data[:,0].max() + 0.1
+        # y_min, y_max = data[:, 1].min() - 0.1, data[:, 1].max() + 0.1
+
+        # xx, yy = np.meshgrid(np.linspace(x_min,x_max, 100),
+        # np.linspace(y_min, y_max, 100))
+
+        # x_in = np.c_[xx.ravel(), yy.ravel()]
+
+        # y_pred = [[dmc_model.predict(x) for x in x_in]]
+        # for i, y in enumerate(y_pred[0]):
+        #     if y == 'Iris-setosa':
+        #         y_pred[0][i] = 1
+        #     elif y == 'Iris-virginica':
+        #         y_pred[0][i] = 2
         #     else:
-        #         color = 'red'
-        #     plt.scatter(float(k[0]), float(k[1]), c = color)
+        #         y_pred[0][i] = 3
 
-        # plt.axis([-0.05, 1.05, -0.05, 1.05])
-        # plt.grid(True)
-        # plt.savefig('Artificial1.png')
+        # y_pred = np.round(y_pred).reshape(xx.shape)
+
+        # plt.contourf(xx, yy, y_pred, cmap=plt.cm.RdYlBu, alpha=0.7 )
+
+        # plt.xlim(xx.min(), xx.max())
+        # plt.ylim(yy.min(), yy.max())
+
+        # dmc_y_pred = np.array([dmc_model.predict(x) for x in decisionData.values])
+
+        # setosa = np.where(dmc_y_pred == 'Iris-setosa')
+        # virginica = np.where(dmc_y_pred == 'Iris-virginica')
+        # versicolor = np.where(dmc_y_pred == 'Iris-versicolor')
+
+        # plt.scatter(data[setosa, 0], data[setosa, 1],
+        #             color='red', marker='o', label='setosa')
+        # plt.scatter(data[versicolor, 0], data[versicolor, 1],
+        #             color='blue', marker='X', label='versicolor')
+        # plt.scatter(data[virginica, 0], data[virginica, 1],
+        #             color='green', marker='P', label='virginica')
+
         # plt.show()
-
-        data = X_test_2d[:][:].values
-
-        x_min, x_max = data[:, 0].min() - 0.1, data[:,0].max() + 0.1
-        y_min, y_max = data[:, 1].min() - 0.1, data[:, 1].max() + 0.1
-
-        xx, yy = np.meshgrid(np.linspace(x_min,x_max, 100),
-        np.linspace(y_min, y_max, 100))
-
-        x_in = np.c_[xx.ravel(), yy.ravel()]
-
-        y_pred = [[dmc_model.predict(x) for x in x_in]]
-        for i, y in enumerate(y_pred[0]):
-            if y == 'Iris-setosa':
-                y_pred[0][i] = 1
-            elif y == 'Iris-virginica':
-                y_pred[0][i] = 2
-            else:
-                y_pred[0][i] = 3
-
-        y_pred = np.round(y_pred).reshape(xx.shape)
-
-        plt.contourf(xx, yy, y_pred, cmap=plt.cm.RdYlBu, alpha=0.7 )
-
-        plt.xlim(xx.min(), xx.max())
-        plt.ylim(yy.min(), yy.max())
-
-        dmc_y_pred = np.array([dmc_model.predict(x) for x in X_test_2d.values])
-
-        setosa = np.where(dmc_y_pred == 'Iris-setosa')
-        virginica = np.where(dmc_y_pred == 'Iris-virginica')
-        versicolor = np.where(dmc_y_pred == 'Iris-versicolor')
-
-        plt.scatter(data[setosa, 0], data[setosa, 1],
-                    color='red', marker='o', label='setosa')
-        plt.scatter(data[versicolor, 0], data[versicolor, 1],
-                    color='blue', marker='X', label='versicolor')
-        plt.scatter(data[virginica, 0], data[virginica, 1],
-                    color='green', marker='P', label='virginica')
-
-        plt.show()
 
         return 0
     
