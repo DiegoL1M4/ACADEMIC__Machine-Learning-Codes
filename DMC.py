@@ -1,8 +1,6 @@
-
-from math import floor
-
 import numpy as np
 
+from math import floor
 from General import General
 
 class DMC:
