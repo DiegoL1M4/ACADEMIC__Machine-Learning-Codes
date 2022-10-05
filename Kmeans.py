@@ -1,5 +1,6 @@
 import random
 import numpy as np
+import matplotlib.pyplot as plt
 
 from math import floor
 from General import General
@@ -20,10 +21,10 @@ class Kmeans:
                 dataToPredict.append(sample)
             counter += 1
 
-        # Select centroids (Initial)
+        # Initial centroids selection
         centroids = []
+
         centroidsIndex = []
-        
         for k in range(K_value):
             number = random.randrange(0, len(dataTrained))
             while (centroidsIndex != [] and number in centroidsIndex):
@@ -44,14 +45,12 @@ class Kmeans:
                         sample[2] = centroids.index(centroid)
 
             # Calc new centroids
-            typing = ''
             collection = []
             dataTrained = sorted(dataTrained, key=lambda case: case[2])
+            typing = dataTrained[0][2]
 
             if(k != movements - 1):
                 for coords in dataTrained:
-                    if(typing == ''):
-                        typing = coords[2]
                     if(typing != coords[2]):
                         centroids[typing] = np.mean(collection, axis=0).tolist()
                         typing = coords[2]
@@ -97,7 +96,7 @@ class Kmeans:
                     typing = nameTypes[k]
                     selectedTypeSum = typeSum[k]
 
-            centroids[i] = [centroid, typing]
+            centroids[i] = [centroids[i], typing]
             i += 1
         
         return [centroids, dataToPredict]
@@ -111,3 +110,14 @@ class Kmeans:
                 sample[2] = test[1]
             
         return sample
+
+    def predict2(dataBase, sample):
+        distance = ''
+        result = ''
+        for test in dataBase:
+            distanceCalc = General.calcDistance(test[0], sample)
+            if(distance == '' or distanceCalc < distance):
+                distance = distanceCalc
+                result = test[1]
+            
+        return result
