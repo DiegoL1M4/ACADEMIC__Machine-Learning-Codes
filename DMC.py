@@ -36,13 +36,13 @@ class DMC:
         
         return [dataMean, dataToPredict]
             
-    def predict(dataBase, dataPredict):
-        for sample in dataPredict:
-            distance = ''
-            for test in dataBase:
-                distanceCalc = General.calcDistance(test[0], sample[0])
-                if(distance == '' or distanceCalc < distance):
-                    distance = distanceCalc
-                    sample[2] = test[1]
+    def predict(dataBase, sample):
+        distance = ''
+        result = ''
+        for test in dataBase:
+            distanceCalc = General.calcDistance(test[0], sample)
+            if(distance == '' or distanceCalc < distance):
+                distance = distanceCalc
+                result = test[1]
             
-        return dataPredict
+        return result

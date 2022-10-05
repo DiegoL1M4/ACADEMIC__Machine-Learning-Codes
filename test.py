@@ -1,50 +1,59 @@
-
 from General import General
 from KNN import KNN
 from DMC import DMC
 from Kmeans import Kmeans
 from DecisionSurface import DecisionSurface
 
-# Variables
+# Execution Variables
 dataBasePercentage = 0.8
 totalExec = 20
 
-K_value_KNN = 5
+K_value_KNN = 6
 K_value_Kmeans = 20
 movements = 100
-algorithm = "Kmeans" # KNN | DMC | Kmeans
-dataBaseName = "artificial1" # iris | column | artificial1
 
-# Operation 
+algorithm = "KNN" # KNN | DMC | Kmeans
+dataBaseName = "iris" # iris | column | artificial1
+
+# Operation Variables
 hitRateList = []
 decisionSurface = DecisionSurface()
 
+# Operation
 for k in range(totalExec):
+    # Data
     data = General.normalization(General.getData(dataBaseName))
+    predictResult = []
 
+    # Train
     if(algorithm == "KNN"):
         dataPart = KNN.train(data, dataBasePercentage)
-        predictResult = KNN.predict(K_value_KNN, dataPart[0], dataPart[1])
     elif(algorithm == "DMC"):
         dataPart = DMC.train(data, dataBasePercentage)
-        predictResult = DMC.predict(dataPart[0], dataPart[1])
     elif(algorithm == "Kmeans"):
-        predictResult = []
         dataPart = Kmeans.train(K_value_Kmeans, data, dataBasePercentage, movements)
 
-        for sample in dataPart[1]:
-            predictResult.append(Kmeans.predict(dataPart[0], sample))
+    # Test
+    for sample in dataPart[1]:
+        if(algorithm == "KNN"):
+            sample[2] = KNN.predict(K_value_KNN, dataPart[0], sample[0])
+        elif(algorithm == "DMC"):
+            sample[2] = DMC.predict(dataPart[0], sample[0])
+        elif(algorithm == "Kmeans"):
+            sample[2] = Kmeans.predict(dataPart[0], sample[0])
+        
+        predictResult.append(sample)
 
-    decisionSurface.plot(algorithm, General.twoCoordsData(dataPart[0], 'list'), General.twoCoordsData(data, 'dataFrame'))
+    # Decision Surface and Confusion Matrix
+    decisionSurface.plot(algorithm, General.twoCoordsData(dataPart[0], 'list'), General.twoCoordsData(data, 'dataFrame'), K_value_KNN)
+    General.plotConfusionMatrix(General.confusionMatrix(dataPart[0], predictResult), k)
     
+    # Result
     print("\nPredição " + str(k + 1) + ":")
     print(predictResult)
-    
-    General.plotConfusionMatrix(General.confusionMatrix(dataPart[0], predictResult), k)
-
     hitRateList.append(General.hitRate(predictResult))
     
-
+# Final Results
 print("\nLista das taxas de acerto:")
 print(hitRateList)
 

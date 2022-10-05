@@ -103,16 +103,6 @@ class Kmeans:
 
     def predict(dataBase, sample):
         distance = ''
-        for test in dataBase:
-            distanceCalc = General.calcDistance(test[0], sample[0])
-            if(distance == '' or distanceCalc < distance):
-                distance = distanceCalc
-                sample[2] = test[1]
-            
-        return sample
-
-    def predict2(dataBase, sample):
-        distance = ''
         result = ''
         for test in dataBase:
             distanceCalc = General.calcDistance(test[0], sample)
