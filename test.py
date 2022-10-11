@@ -19,10 +19,17 @@ dataBaseName = "iris" # iris | column | artificial1
 hitRateList = []
 decisionSurface = DecisionSurface()
 
+# Generate shuffle bases
+if(True):
+    for name in ["iris", "column", "artificial1"]:
+        dataFile = General.readFile(name)
+        for k in range(totalExec):
+            General.newBaseShuffled(dataFile, name, k)
+
 # Operation
 for k in range(totalExec):
     # Data
-    data = General.normalization(General.getData(dataBaseName))
+    data = General.normalization(General.getData(dataBaseName, k))
     predictResult = []
 
     # Train
@@ -32,6 +39,11 @@ for k in range(totalExec):
         dataPart = DMC.train(data, dataBasePercentage)
     elif(algorithm == "Kmeans"):
         dataPart = Kmeans.train(K_value_Kmeans, data, dataBasePercentage, movements)
+
+    print("\nTrained Data " + str(k + 1) + ":")
+    print(dataPart[0])
+    print("Predict Data " + str(k + 1) + ":")
+    print(dataPart[1])
 
     # Test
     for sample in dataPart[1]:
@@ -51,6 +63,7 @@ for k in range(totalExec):
     # Result
     print("\nPredição " + str(k + 1) + ":")
     print(predictResult)
+
     hitRateList.append(General.hitRate(predictResult))
     
 # Final Results

@@ -9,9 +9,32 @@ import matplotlib.pyplot as plt
 from ntpath import join
 
 class General:
-    def getData(dataBaseName):
+    def readFile(dataBaseName):
         current_dir = os.path.dirname(os.path.realpath(__file__))
         file = open(join(current_dir, 'data/' + dataBaseName + '.data'), 'r')
+        data = []
+
+        # Read file
+        row = file.readline()
+        while(row != '' and row != '\n'):
+            data.append(row)
+            row = file.readline()
+        file.close()
+
+        return data
+
+    def newBaseShuffled(data, dataBaseName, order):
+        random.shuffle(data)
+
+        current_dir = os.path.dirname(os.path.realpath(__file__))
+        file = open(join(current_dir, 'dataShuffled/' + dataBaseName + str(order) + '.data'), 'w')
+        for k in data:
+            file.write(k)
+        file.close()
+
+    def getData(dataBaseName, order):
+        current_dir = os.path.dirname(os.path.realpath(__file__))
+        file = open(join(current_dir, 'dataShuffled/' + dataBaseName + str(order) + '.data'), 'r')
         data = []
 
         # Read file
