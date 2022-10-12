@@ -57,8 +57,6 @@ class General:
             data.append(sample)
             row = file.readline()
 
-        # Shuffle
-        random.shuffle(data)
         return data
 
     def normalization(data):
