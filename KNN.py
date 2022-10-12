@@ -6,6 +6,7 @@ from General import General
 
 class KNN:   
     def train(data, percentage):
+        # Data division
         total = floor(len(data) * percentage)
         dataTrained = []
         dataToPredict = []

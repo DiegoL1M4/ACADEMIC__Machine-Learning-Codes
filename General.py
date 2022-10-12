@@ -106,6 +106,16 @@ class General:
             total += math.pow(value - average, 2)
         return math.sqrt(total / len(values))
 
+    def PDF(sample, classTrain):
+        result = 0
+        for k in range(len(sample)):
+            total = 1 / (classTrain[0][1][k] * math.sqrt(2 * math.pi))
+            exp = -(1/2) * math.pow((sample[k] - classTrain[0][0][k]) / classTrain[0][1][k] , 2)
+
+            result += total * math.pow(math.e, exp)
+
+        return result
+
     def confusionMatrix(dataTrain, dataPredict):
         legends = []
         matrix = []

@@ -7,7 +7,7 @@ from General import General
 
 class Kmeans:   
     def train(K_value, data, percentage, movements):
-        # Division of data
+        # Data division
         total = floor(len(data) * percentage)
         dataTrained = []
         dataToPredict = []

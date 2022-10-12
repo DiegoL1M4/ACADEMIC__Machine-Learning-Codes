@@ -3,7 +3,7 @@ import numpy as np
 from math import floor
 from General import General
 
-class DMC:
+class NaiveBayes:
     def train(data, percentage):
         # Data division
         total = floor(len(data) * percentage)
@@ -19,31 +19,32 @@ class DMC:
                 dataToPredict.append(sample)
             counter += 1
 
-        # Definition of centroids
-        dataMean = []
+        # Data calculation
         dataBaseSorted = sorted(dataTrained, key=lambda case: case[1])
-        typing = ''
+        typing = dataBaseSorted[0][1]
+        dataTrained = []
         collection = []
 
         for coords in dataBaseSorted:
-            if(typing == ''):
-                typing = coords[1]
             if(typing != coords[1]):
-                dataMean.append([np.mean(collection, axis=0), typing])
+                dataTrained.append([[np.mean(collection, axis=0), np.std(collection, axis=0)], typing, len(collection) / total])
                 typing = coords[1]
                 collection = []
+
             collection.append(coords[0])
-        dataMean.append([np.mean(collection, axis=0), typing])
-        
-        return [dataMean, dataToPredict]
+        dataTrained.append([[np.mean(collection, axis=0), np.std(collection, axis=0)], typing, len(collection) / total])
+
+        return [dataTrained, dataToPredict]
             
     def predict(dataBase, sample):
-        distance = ''
         result = ''
+        probCalc = 0
+
         for test in dataBase:
-            distanceCalc = General.calcDistance(test[0], sample)
-            if(distance == '' or distanceCalc < distance):
-                distance = distanceCalc
+            prob = General.PDF(sample, test)
+
+            if(probCalc < prob * test[2]):
+                probCalc = prob
                 result = test[1]
             
         return result
