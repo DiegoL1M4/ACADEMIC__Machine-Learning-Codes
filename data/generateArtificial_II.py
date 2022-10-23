@@ -17,7 +17,7 @@ def generateData(onlyGraphic):
     nodes = []
 
     if(onlyGraphic):
-        file = open(join(current_dir, 'artificial1.data'), 'r')
+        file = open(join(current_dir, 'artificialII.data'), 'r')
         
         row = file.readline()
         while(row != '' and row != '\n'):
@@ -34,48 +34,47 @@ def generateData(onlyGraphic):
             row = file.readline()
     
     if(not onlyGraphic):
-        file = open(join(current_dir, 'artificial.data'), 'w')
-        for i in range(6):
-            x = round(np.random.uniform(0, 0.25), 2)
-            y = round(np.random.uniform(0.6, 0.9), 2)
+        file = open(join(current_dir, 'artificialII.data'), 'w')
+        for i in range(15):
+            x = round(np.random.uniform(0.1, 0.3), 2)
+            y = round(np.random.uniform(0.55, 0.8), 2)
 
             file.write(str(x) + "," + str(y) + ",A\n")
             nodes.append([x, y, 'A'])
 
-        for i in range(8):
-            x = round(np.random.uniform(0.01, 0.3), 2)
-            y = round(np.random.uniform(0.01, 0.3), 2)
-
-            file.write(str(x) + "," + str(y) + ",A\n")
-            nodes.append([x, y, 'A'])
-
-        for i in range(6):
-            x = round(np.random.uniform(0.6, 1), 2)
-            y = round(np.random.uniform(0, 0.25), 2)
-
-            file.write(str(x) + "," + str(y) + ",A\n")
-            nodes.append([x, y, 'A'])
-
-        for i in range(10):
-            x = round(np.random.uniform(0.64, 0.9), 2)
-            y = round(np.random.uniform(0.64, 0.9), 2)
+        for i in range(15):
+            x = round(np.random.uniform(0.64, 0.8), 2)
+            y = round(np.random.uniform(0.55, 0.8), 2)
 
             file.write(str(x) + "," + str(y) + ",B\n")
             nodes.append([x, y, 'B'])
 
+        for i in range(15):
+            x = round(np.random.uniform(0.35, 0.5), 2)
+            y = round(np.random.uniform(0.15, 0.4), 2)
+
+            file.write(str(x) + "," + str(y) + ",C\n")
+            nodes.append([x, y, 'C'])
+
     file.close()
     return nodes
 
-experiment = generateData(True)
+
+
+##### MAIN #####
+
+experiment = generateData(False) # OnlyGraphic: True | False
 
 for k in experiment:
     if(k[2] == 'A'):
         color = 'blue'
-    else:
+    if(k[2] == 'B'):
         color = 'red'
+    if(k[2] == 'C'):
+        color = 'black'
     plt.scatter(float(k[0]), float(k[1]), c = color)
 
 plt.axis([-0.05, 1.05, -0.05, 1.05])
 plt.grid(True)
-plt.savefig('Artificial1.png')
+plt.savefig('Artificial2.png')
 plt.show()

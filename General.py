@@ -107,14 +107,34 @@ class General:
         return math.sqrt(total / len(values))
 
     def PDF(sample, classTrain):
-        result = 0
+        result = 1
         for k in range(len(sample)):
-            total = 1 / (classTrain[0][1][k] * math.sqrt(2 * math.pi))
-            exp = -(1/2) * math.pow((sample[k] - classTrain[0][0][k]) / classTrain[0][1][k] , 2)
+            mean = classTrain[0][0][k]
+            std = classTrain[0][1][k]
 
-            result += total * math.pow(math.e, exp)
+            if(std == 0):
+                std = 1
+            
+            total = 1 / (std * math.sqrt(2 * math.pi))
+            exp = -(1/2) * math.pow((sample[k] - mean) / std , 2)
+
+            result *= total * math.pow(math.e, exp)
 
         return result
+    
+    def multivariateGaussian(sample, matrix, mean):
+        determinant = np.linalg.det(matrix)
+
+        if(determinant == 0):
+            determinant = 1
+            matrix = matrix + (np.eye(len(matrix)) * 1e-8)
+        
+        inverse = np.linalg.inv(matrix)
+        
+        total = 1 / ( math.pow(2 * math.pi, len(sample) / 2) * np.power(determinant, 1 / 2) )
+        exp = -(1/2) * np.dot( np.dot((sample - mean), inverse) , (sample - mean))
+
+        return total * math.pow(math.e, exp)
 
     def confusionMatrix(dataTrain, dataPredict):
         legends = []

@@ -1,3 +1,4 @@
+from BayesPosteriori import BayesPosteriori
 from General import General
 from KNN import KNN
 from DMC import DMC
@@ -15,13 +16,14 @@ K_value_KNN = 6
 K_value_Kmeans = 20
 movements = 100
 
-generateDataFiles = False # True | False
-algorithm = "NaiveB" # KNN | DMC | Kmeans | NaiveB
-dataBaseName = "iris" # iris | column | artificial1
+generateDataFiles = True # True | False
+algorithm = "KNN" # KNN | DMC | Kmeans | BayesPosteriori | NaiveB
+dataBaseName = "breastMod" # iris | column | artificial1 | breastMod | dermatologyMod | artificialII
 
 # Generate shuffle bases
 if(generateDataFiles):
-    for name in ["iris", "column", "artificial1"]:
+    # ["iris", "column", "breastMod", "dermatologyMod", "artificial1", "artificialII"]
+    for name in ["artificialII"]:
         dataFile = General.readFile(name)
         for k in range(totalExec):
             General.newBaseShuffled(dataFile, name, k)
@@ -46,6 +48,8 @@ for unique in range(1):
             dataPart = Kmeans.train(K_value_Kmeans, data, dataBasePercentage, movements)
         elif(algorithm == "NaiveB"):
             dataPart = NaiveBayes.train(data, dataBasePercentage)
+        elif(algorithm == "BayesPosteriori"):
+            dataPart = BayesPosteriori.train(data, dataBasePercentage)
 
         # Test
         for sample in dataPart[1]:
@@ -57,20 +61,22 @@ for unique in range(1):
                 sample[2] = Kmeans.predict(dataPart[0], sample[0])
             elif(algorithm == "NaiveB"):
                 sample[2] = NaiveBayes.predict(dataPart[0], sample[0])
+            elif(algorithm == "BayesPosteriori"):
+                sample[2] = BayesPosteriori.predict(dataPart[0], sample[0])
             
             predictResult.append(sample)
 
         # Decision Surface and Confusion Matrix
-        decisionSurface.plot(algorithm, dataPart[0], General.twoCoordsData(data, 'dataFrame'), K_value_KNN)
-        General.plotConfusionMatrix(General.confusionMatrix(dataPart[0], predictResult), k)
+        # decisionSurface.plot(algorithm, dataPart[0], General.twoCoordsData(data, 'dataFrame'), K_value_KNN)
+        # General.plotConfusionMatrix(General.confusionMatrix(dataPart[0], predictResult), k)
 
         # Train   
-        print("\nTrained Data " + str(k + 1) + ":")
-        print(dataPart[0])
+        # print("\nTrained Data " + str(k + 1) + ":")
+        # print(dataPart[0])
 
         # Result
-        print("\nPredição " + str(k + 1) + ":")
-        print(predictResult)
+        # print("\nPredição " + str(k + 1) + ":")
+        # print(predictResult)
 
         hitRateList.append(General.hitRate(predictResult))
         
