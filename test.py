@@ -1,24 +1,32 @@
-from BayesPosteriori import BayesPosteriori
-from General import General
+
+import pandas as pd
+
 from KNN import KNN
 from DMC import DMC
 from Kmeans import Kmeans
+from BayesPosteriori import BayesPosteriori
 from NaiveBayes import NaiveBayes
 
+from General import General
 from DecisionSurface import DecisionSurface
 
 # Execution Variables
 decisionSurface = DecisionSurface()
 dataBasePercentage = 0.8
 totalExec = 20
+generateDataFiles = False # True | False
 
 K_value_KNN = 6
 K_value_Kmeans = 20
 movements = 100
 
-generateDataFiles = True # True | False
-algorithm = "KNN" # KNN | DMC | Kmeans | BayesPosteriori | NaiveB
-dataBaseName = "breastMod" # iris | column | artificial1 | breastMod | dermatologyMod | artificialII
+valueDecision1 = 0
+valueDecision2 = 1
+decisionSurfaceActive = False # True | False
+confusionMatrixActive = True # True | False
+
+algorithm = "NaiveBayes" # KNN | DMC | Kmeans | BayesPosteriori | NaiveBayes
+dataBaseName = "dermatologyMod" # iris | column | artificial1 | breastMod | dermatologyMod | artificialII
 
 # Generate shuffle bases
 if(generateDataFiles):
@@ -46,10 +54,10 @@ for unique in range(1):
             dataPart = DMC.train(data, dataBasePercentage)
         elif(algorithm == "Kmeans"):
             dataPart = Kmeans.train(K_value_Kmeans, data, dataBasePercentage, movements)
-        elif(algorithm == "NaiveB"):
-            dataPart = NaiveBayes.train(data, dataBasePercentage)
         elif(algorithm == "BayesPosteriori"):
             dataPart = BayesPosteriori.train(data, dataBasePercentage)
+        elif(algorithm == "NaiveBayes"):
+            dataPart = NaiveBayes.train(data, dataBasePercentage)
 
         # Test
         for sample in dataPart[1]:
@@ -59,16 +67,33 @@ for unique in range(1):
                 sample[2] = DMC.predict(dataPart[0], sample[0])
             elif(algorithm == "Kmeans"):
                 sample[2] = Kmeans.predict(dataPart[0], sample[0])
-            elif(algorithm == "NaiveB"):
-                sample[2] = NaiveBayes.predict(dataPart[0], sample[0])
             elif(algorithm == "BayesPosteriori"):
                 sample[2] = BayesPosteriori.predict(dataPart[0], sample[0])
+            elif(algorithm == "NaiveBayes"):
+                sample[2] = NaiveBayes.predict(dataPart[0], sample[0])
             
             predictResult.append(sample)
 
-        # Decision Surface and Confusion Matrix
-        # decisionSurface.plot(algorithm, dataPart[0], General.twoCoordsData(data, 'dataFrame'), K_value_KNN)
-        # General.plotConfusionMatrix(General.confusionMatrix(dataPart[0], predictResult), k)
+        # Confusion Matrix
+        if(confusionMatrixActive):
+            General.plotConfusionMatrix(General.confusionMatrix(dataPart[0], predictResult), k)
+
+        # Decision Surface
+        if(decisionSurfaceActive):
+            dataDecision = General.twoCoordsData(data, valueDecision1, valueDecision2, 'list')
+
+            if(algorithm == "KNN"):
+                dataPartDecision = KNN.train(dataDecision, dataBasePercentage)
+            elif(algorithm == "DMC"):
+                dataPartDecision = DMC.train(dataDecision, dataBasePercentage)
+            elif(algorithm == "Kmeans"):
+                dataPartDecision = Kmeans.train(K_value_Kmeans, dataDecision, dataBasePercentage, movements)
+            elif(algorithm == "NaiveBayes"):
+                dataPartDecision = NaiveBayes.train(dataDecision, dataBasePercentage)
+            elif(algorithm == "BayesPosteriori"):
+                dataPartDecision = BayesPosteriori.train(dataDecision, dataBasePercentage)
+
+            decisionSurface.plot(algorithm, dataPartDecision[0], General.twoCoordsData(data, valueDecision1, valueDecision2, 'dataFrame'), K_value_KNN)
 
         # Train   
         # print("\nTrained Data " + str(k + 1) + ":")

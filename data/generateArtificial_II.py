@@ -63,7 +63,7 @@ def generateData(onlyGraphic):
 
 ##### MAIN #####
 
-experiment = generateData(False) # OnlyGraphic: True | False
+experiment = generateData(True) # OnlyGraphic: True | False
 
 for k in experiment:
     if(k[2] == 'A'):

@@ -1,6 +1,5 @@
 import random
 import numpy as np
-import matplotlib.pyplot as plt
 
 from math import floor
 from General import General
@@ -81,6 +80,7 @@ class Kmeans:
             typeSum.append(0)
 
         i = 0
+        centroidsData = []
         for centroidGroup in dataTypeGroup:
             for k in range(len(typeSum)):
                 typeSum[k] = 0
@@ -94,12 +94,12 @@ class Kmeans:
             for k in range(len(nameTypes)):
                 if(typing == '' or typeSum[k] > selectedTypeSum):
                     typing = nameTypes[k]
-                    selectedTypeSum = typeSum[k]
+                    selectedTypeSum = typeSum[k]  
 
-            centroids[i] = [centroids[i], typing]
+            centroidsData.append([centroids[i], typing])
             i += 1
         
-        return [centroids, dataToPredict]
+        return [centroidsData, dataToPredict]
 
     def predict(dataBase, sample):
         distance = ''

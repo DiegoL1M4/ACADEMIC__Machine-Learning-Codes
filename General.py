@@ -1,6 +1,7 @@
 import math
 import random
 import os
+
 import pandas as pd
 import numpy as np
 import seaborn as sns
@@ -127,7 +128,7 @@ class General:
 
         if(determinant == 0):
             determinant = 1
-            matrix = matrix + (np.eye(len(matrix)) * 1e-8)
+            matrix = matrix + (np.eye(len(matrix)) * 1e-10)
         
         inverse = np.linalg.inv(matrix)
         
@@ -170,13 +171,13 @@ class General:
         plt.savefig("graphics/ConfusionMatrix " + str(order + 1) + ".png")
         plt.clf()
 
-    def twoCoordsData(data, type):
+    def twoCoordsData(data, valueDecision1, valueDecision2, type):
         newBase = []
         for k in data:
             if(type == 'list'):
-                newBase.append([[k[0][0], k[0][1]], k[1]])
+                newBase.append([[k[0][valueDecision1], k[0][valueDecision2]], k[1]])
             if(type == 'dataFrame'):
-                newBase.append([k[0][0], k[0][1], k[1]])
+                newBase.append([k[0][valueDecision1], k[0][valueDecision2], k[1]])
         
         if(type == 'list'):
             return newBase

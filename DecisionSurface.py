@@ -5,6 +5,7 @@ from DMC import DMC
 from General import General
 from KNN import KNN
 from Kmeans import Kmeans
+from BayesPosteriori import BayesPosteriori
 from NaiveBayes import NaiveBayes
 
 class DecisionSurface:
@@ -23,13 +24,15 @@ class DecisionSurface:
 
         x_in = np.c_[xx.ravel(), yy.ravel()]
         if(algorithm == "KNN"):
-            y_pred = [[KNN.predict(K_value_KNN, General.twoCoordsData(dataPart, 'list'), x) for x in x_in]]
+            y_pred = [[KNN.predict(K_value_KNN, dataPart, x) for x in x_in]]
         elif(algorithm == "DMC"):
-            y_pred = [[DMC.predict(General.twoCoordsData(dataPart, 'list'), x) for x in x_in]]
+            y_pred = [[DMC.predict(dataPart, x) for x in x_in]]
         elif(algorithm == "Kmeans"):
-            y_pred = [[Kmeans.predict(General.twoCoordsData(dataPart, 'list'), x) for x in x_in]]
-        elif(algorithm == "NaiveB"):
+            y_pred = [[Kmeans.predict(dataPart, x) for x in x_in]]
+        elif(algorithm == "NaiveBayes"):
             y_pred = [[NaiveBayes.predict(dataPart, x[:-1]) for x in x_in]]
+        elif(algorithm == "BayesPosteriori"):
+            y_pred = [[BayesPosteriori.predict(dataPart, x[:-1]) for x in x_in]]
 
         listNames = []
         for i, y in enumerate(y_pred[0]):
@@ -45,13 +48,15 @@ class DecisionSurface:
         plt.ylim(yy.min(), yy.max())
 
         if(algorithm == "KNN"):
-            algorithm_pred = np.array([KNN.predict(K_value_KNN, General.twoCoordsData(dataPart, 'list'), x) for x in decisionData.values])
+            algorithm_pred = np.array([KNN.predict(K_value_KNN, dataPart, x) for x in decisionData.values])
         elif(algorithm == "DMC"):
-            algorithm_pred = np.array([DMC.predict(General.twoCoordsData(dataPart, 'list'), x) for x in decisionData.values])
+            algorithm_pred = np.array([DMC.predict(dataPart, x) for x in decisionData.values])
         elif(algorithm == "Kmeans"):
-            algorithm_pred = np.array([Kmeans.predict(General.twoCoordsData(dataPart, 'list'), x) for x in decisionData.values])
-        elif(algorithm == "NaiveB"):
+            algorithm_pred = np.array([Kmeans.predict(dataPart, x) for x in decisionData.values])
+        elif(algorithm == "NaiveBayes"):
             algorithm_pred = np.array([NaiveBayes.predict(dataPart, x[:-1]) for x in decisionData.values])
+        elif(algorithm == "BayesPosteriori"):
+            algorithm_pred = np.array([BayesPosteriori.predict(dataPart, x[:-1]) for x in decisionData.values])
 
         separateDataList = []
         for dataType in listNames:

@@ -27,12 +27,12 @@ class BayesPosteriori:
 
         for coords in dataBaseSorted:
             if(typing != coords[1]):
-                dataTrained.append([np.cov(collection, rowvar=False), typing, len(collection) / total, np.mean(collection, axis=0)])
+                dataTrained.append([[np.cov(collection, rowvar=False), np.mean(collection, axis=0)], typing, len(collection) / total])
                 typing = coords[1]
                 collection = []
 
             collection.append(coords[0])
-        dataTrained.append([np.cov(collection, rowvar=False), typing, len(collection) / total, np.mean(collection)])
+        dataTrained.append([[np.cov(collection, rowvar=False), np.mean(collection, axis=0)], typing, len(collection) / total])
 
         return [dataTrained, dataToPredict]
             
@@ -41,13 +41,13 @@ class BayesPosteriori:
         probCalc = 0
 
         for test in dataBase:
-            covMatrix = test[0]
-            mean = test[3]
+            covMatrix = test[0][0]
+            mean = test[0][1]
             priori = test[2]
 
             likelihood = General.multivariateGaussian(sample, covMatrix, mean)
 
-            if(probCalc < (likelihood * priori)):
+            if(result == '' or probCalc < (likelihood * priori)):
                 probCalc = (likelihood * priori)
                 result = test[1]
             

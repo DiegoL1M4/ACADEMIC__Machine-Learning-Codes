@@ -44,7 +44,7 @@ class NaiveBayes:
             likelihood = General.PDF(sample, test)
             priori = test[2]
 
-            if(probCalc < (likelihood * priori)):
+            if(result == '' or probCalc < (likelihood * priori)):
                 probCalc = (likelihood * priori)
                 result = test[1]
             
