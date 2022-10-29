@@ -1,4 +1,6 @@
 
 # Folders
 /graphics
+/__pycache__
 /algorithms/__pycache__
+/dataCodes/__pycache__
