@@ -5,7 +5,7 @@ def plot_pdf_3D(self, df:pd.DataFrame, label_column:str):
     # train the model
     df_without_label = df.drop(columns=[label_column])
     df_cov = df_without_label.values
-    
+
     self.fit(df_without_label, list(df[label_column]))
 
     feats = df_without_label.columns
@@ -40,3 +40,4 @@ def plot_pdf_3D(self, df:pd.DataFrame, label_column:str):
                 ax.set_ylabel(feat_2)
                 ax.set_zlabel('Discriminant')
                 plt.show()
+                

@@ -1,9 +1,9 @@
 import numpy as np
 
 from math import floor
-from General import General
+from utils.General import General
 
-class BayesPosteriori:
+class QuadraticDiscriminant:
     def train(data, percentage):
         # Data division
         total = floor(len(data) * percentage)
@@ -45,7 +45,7 @@ class BayesPosteriori:
             mean = test[0][1]
             priori = test[2]
 
-            likelihood = General.multivariateGaussian(sample, covMatrix, mean)
+            likelihood = General.quadraticDiscriminante(sample, covMatrix, mean)
 
             if(result == '' or probCalc < (likelihood * priori)):
                 probCalc = (likelihood * priori)

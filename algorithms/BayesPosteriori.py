@@ -1,9 +1,9 @@
 import numpy as np
 
 from math import floor
-from General import General
+from utils.General import General
 
-class NaiveBayes:
+class BayesPosteriori:
     def train(data, percentage):
         # Data division
         total = floor(len(data) * percentage)
@@ -27,12 +27,12 @@ class NaiveBayes:
 
         for coords in dataBaseSorted:
             if(typing != coords[1]):
-                dataTrained.append([[np.mean(collection, axis=0), np.std(collection, axis=0)], typing, len(collection) / total])
+                dataTrained.append([[np.cov(collection, rowvar=False), np.mean(collection, axis=0)], typing, len(collection) / total])
                 typing = coords[1]
                 collection = []
 
             collection.append(coords[0])
-        dataTrained.append([[np.mean(collection, axis=0), np.std(collection, axis=0)], typing, len(collection) / total])
+        dataTrained.append([[np.cov(collection, rowvar=False), np.mean(collection, axis=0)], typing, len(collection) / total])
 
         return [dataTrained, dataToPredict]
             
@@ -41,8 +41,11 @@ class NaiveBayes:
         probCalc = 0
 
         for test in dataBase:
-            likelihood = General.PDF(sample, test)
+            covMatrix = test[0][0]
+            mean = test[0][1]
             priori = test[2]
+
+            likelihood = General.multivariateGaussian(sample, covMatrix, mean)
 
             if(result == '' or probCalc < (likelihood * priori)):
                 probCalc = (likelihood * priori)

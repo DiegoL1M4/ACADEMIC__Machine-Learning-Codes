@@ -1,7 +1,7 @@
 import numpy as np
 
 from math import floor
-from General import General
+from utils.General import General
 
 class DMC:
     def train(data, percentage):

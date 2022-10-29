@@ -2,8 +2,6 @@
 import os
 import numpy as np
 
-from ntpath import join
-
 def className(num):
     if(num == "1\n"):             
         return "psoriasis\n"
@@ -19,7 +17,7 @@ def className(num):
         return "pityriasis_rubra_pilaris\n"
 
 current_dir = os.path.dirname(os.path.realpath(__file__))
-file = open(join(current_dir, 'dermatology.data'), 'r')
+file = open('data/dermatology.data', 'r')
 data = []
 
 row = file.readline()
@@ -35,8 +33,8 @@ mean = int(np.mean(data))
 median = int(np.median(data))
 
 # Create new file to replace ? and replace class name
-file = open(join(current_dir, 'dermatology.data'), 'r')
-newFile = open(join(current_dir, 'dermatologyMod.data'), 'w')
+file = open('data/dermatology.data', 'r')
+newFile = open('data/dermatologyMod.data', 'w')
 row = file.readline()
 while(row != '' and row != '\n'):
     parts = row.split(",")

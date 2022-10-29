@@ -137,6 +137,34 @@ class General:
 
         return total * math.pow(math.e, exp)
 
+    def linearDiscriminante(sample, matrix, mean):
+        determinant = np.linalg.det(matrix)
+
+        if(determinant == 0):
+            determinant = 1
+            matrix = matrix + (np.eye(len(matrix)) * 1e-10)
+        
+        inverse = np.linalg.inv(matrix)
+        
+        total = 1 / ( math.pow(2 * math.pi, len(sample) / 2) * np.power(determinant, 1 / 2) )
+        exp = -(1/2) * np.dot( np.dot((sample - mean), inverse) , (sample - mean))
+
+        return total * math.pow(math.e, exp)
+
+    def quadraticDiscriminante(sample, matrix, mean):
+        determinant = np.linalg.det(matrix)
+
+        if(determinant == 0):
+            determinant = 1
+            matrix = matrix + (np.eye(len(matrix)) * 1e-10)
+        
+        inverse = np.linalg.inv(matrix)
+        
+        total = 1 / ( math.pow(2 * math.pi, len(sample) / 2) * np.power(determinant, 1 / 2) )
+        exp = -(1/2) * np.dot( np.dot((sample - mean), inverse) , (sample - mean))
+
+        return total * math.pow(math.e, exp)
+
     def confusionMatrix(dataTrain, dataPredict):
         legends = []
         matrix = []

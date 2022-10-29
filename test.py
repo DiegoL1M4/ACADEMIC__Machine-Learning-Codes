@@ -1,14 +1,17 @@
 
 import pandas as pd
 
-from KNN import KNN
-from DMC import DMC
-from Kmeans import Kmeans
-from BayesPosteriori import BayesPosteriori
-from NaiveBayes import NaiveBayes
+from algorithms.KNN import KNN
+from algorithms.DMC import DMC
+from algorithms.Kmeans import Kmeans
+from algorithms.BayesPosteriori import BayesPosteriori
+from algorithms.NaiveBayes import NaiveBayes
+from algorithms.LinearDiscriminant import LinearDiscriminant
+from algorithms.QuadraticDiscriminant import QuadraticDiscriminant
 
-from General import General
-from DecisionSurface import DecisionSurface
+from utils.General import General
+from utils.DecisionSurface import DecisionSurface
+from utils.Gaussian import Gaussian
 
 # Execution Variables
 decisionSurface = DecisionSurface()
@@ -25,7 +28,7 @@ valueDecision2 = 1
 decisionSurfaceActive = False # True | False
 confusionMatrixActive = True # True | False
 
-algorithm = "NaiveBayes" # KNN | DMC | Kmeans | BayesPosteriori | NaiveBayes
+algorithm = "DMC" # KNN | DMC | Kmeans | BayesPosteriori | NaiveBayes | LinearDiscr | QuadraticDiscr
 dataBaseName = "dermatologyMod" # iris | column | artificial1 | breastMod | dermatologyMod | artificialII
 
 # Generate shuffle bases
@@ -58,6 +61,10 @@ for unique in range(1):
             dataPart = BayesPosteriori.train(data, dataBasePercentage)
         elif(algorithm == "NaiveBayes"):
             dataPart = NaiveBayes.train(data, dataBasePercentage)
+        elif(algorithm == "LinearDiscr"):
+            dataPart = LinearDiscriminant.train(data, dataBasePercentage)
+        elif(algorithm == "QuadraticDiscr"):
+            dataPart = QuadraticDiscriminant.train(data, dataBasePercentage)
 
         # Test
         for sample in dataPart[1]:
@@ -71,6 +78,10 @@ for unique in range(1):
                 sample[2] = BayesPosteriori.predict(dataPart[0], sample[0])
             elif(algorithm == "NaiveBayes"):
                 sample[2] = NaiveBayes.predict(dataPart[0], sample[0])
+            elif(algorithm == "LinearDiscr"):
+                sample[2] = LinearDiscriminant.predict(dataPart[0], sample[0])
+            elif(algorithm == "QuadraticDiscr"):
+                sample[2] = QuadraticDiscriminant.predict(dataPart[0], sample[0])
             
             predictResult.append(sample)
 
@@ -92,6 +103,10 @@ for unique in range(1):
                 dataPartDecision = NaiveBayes.train(dataDecision, dataBasePercentage)
             elif(algorithm == "BayesPosteriori"):
                 dataPartDecision = BayesPosteriori.train(dataDecision, dataBasePercentage)
+            elif(algorithm == "LinearDiscr"):
+                sample[2] = LinearDiscriminant.predict(dataPart[0], sample[0])
+            elif(algorithm == "QuadraticDiscr"):
+                sample[2] = QuadraticDiscriminant.predict(dataPart[0], sample[0])
 
             decisionSurface.plot(algorithm, dataPartDecision[0], General.twoCoordsData(data, valueDecision1, valueDecision2, 'dataFrame'), K_value_KNN)
 

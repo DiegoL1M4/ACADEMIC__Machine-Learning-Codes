@@ -1,5 +1,4 @@
 
-import os
 import numpy as np
 import matplotlib.pyplot as plt
 
@@ -13,11 +12,10 @@ def isNumber(value):
     return True
 
 def generateData(onlyGraphic):
-    current_dir = os.path.dirname(os.path.realpath(__file__))
     nodes = []
 
     if(onlyGraphic):
-        file = open(join(current_dir, 'artificialII.data'), 'r')
+        file = open('data/artificialII.data', 'r')
         
         row = file.readline()
         while(row != '' and row != '\n'):
@@ -34,7 +32,7 @@ def generateData(onlyGraphic):
             row = file.readline()
     
     if(not onlyGraphic):
-        file = open(join(current_dir, 'artificialII.data'), 'w')
+        file = open('data/artificialII.data', 'w')
         for i in range(15):
             x = round(np.random.uniform(0.1, 0.3), 2)
             y = round(np.random.uniform(0.55, 0.8), 2)
@@ -76,5 +74,5 @@ for k in experiment:
 
 plt.axis([-0.05, 1.05, -0.05, 1.05])
 plt.grid(True)
-plt.savefig('Artificial2.png')
+plt.savefig('graphics/Artificial2.png')
 plt.show()

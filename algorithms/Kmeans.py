@@ -2,7 +2,7 @@ import random
 import numpy as np
 
 from math import floor
-from General import General
+from utils.General import General
 
 class Kmeans:   
     def train(K_value, data, percentage, movements):

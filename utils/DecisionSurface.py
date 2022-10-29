@@ -1,12 +1,14 @@
 import numpy as np
 import matplotlib.pyplot as plt
 
-from DMC import DMC
-from General import General
-from KNN import KNN
-from Kmeans import Kmeans
-from BayesPosteriori import BayesPosteriori
-from NaiveBayes import NaiveBayes
+from algorithms.DMC import DMC
+from utils.General import General
+from algorithms.KNN import KNN
+from algorithms.Kmeans import Kmeans
+from algorithms.BayesPosteriori import BayesPosteriori
+from algorithms.NaiveBayes import NaiveBayes
+from algorithms.LinearDiscriminant import LinearDiscriminant
+from algorithms.QuadraticDiscriminant import QuadraticDiscriminant
 
 class DecisionSurface:
     def __init__(self):
@@ -33,6 +35,10 @@ class DecisionSurface:
             y_pred = [[NaiveBayes.predict(dataPart, x[:-1]) for x in x_in]]
         elif(algorithm == "BayesPosteriori"):
             y_pred = [[BayesPosteriori.predict(dataPart, x[:-1]) for x in x_in]]
+        elif(algorithm == "LinearDiscr"):
+            y_pred = [[LinearDiscriminant.predict(dataPart, x[:-1]) for x in x_in]]
+        elif(algorithm == "QuadraticDiscr"):
+            y_pred = [[QuadraticDiscriminant.predict(dataPart, x[:-1]) for x in x_in]]
 
         listNames = []
         for i, y in enumerate(y_pred[0]):
@@ -57,6 +63,10 @@ class DecisionSurface:
             algorithm_pred = np.array([NaiveBayes.predict(dataPart, x[:-1]) for x in decisionData.values])
         elif(algorithm == "BayesPosteriori"):
             algorithm_pred = np.array([BayesPosteriori.predict(dataPart, x[:-1]) for x in decisionData.values])
+        elif(algorithm == "LinearDiscr"):
+            algorithm_pred = np.array([LinearDiscriminant.predict(dataPart, x[:-1]) for x in decisionData.values])
+        elif(algorithm == "QuadraticDiscr"):
+            algorithm_pred = np.array([QuadraticDiscriminant.predict(dataPart, x[:-1]) for x in decisionData.values])
 
         separateDataList = []
         for dataType in listNames:

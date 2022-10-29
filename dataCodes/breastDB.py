@@ -1,10 +1,6 @@
 
-from ntpath import join
-import os
-
-current_dir = os.path.dirname(os.path.realpath(__file__))
-file = open(join(current_dir, 'breast.data'), 'r')
-newFile = open(join(current_dir, 'breastMod.data'), 'w')
+file = open('data/breast.data', 'r')
+newFile = open('data/breastMod.data', 'w')
 
 # Create new file to remove first column, just id
 row = file.readline()
