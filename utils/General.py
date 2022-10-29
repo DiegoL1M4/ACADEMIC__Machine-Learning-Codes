@@ -1,18 +1,14 @@
 import math
 import random
-import os
 
 import pandas as pd
 import numpy as np
 import seaborn as sns
 import matplotlib.pyplot as plt
 
-from ntpath import join
-
 class General:
     def readFile(dataBaseName):
-        current_dir = os.path.dirname(os.path.realpath(__file__))
-        file = open(join(current_dir, 'data/' + dataBaseName + '.data'), 'r')
+        file = open('data/' + dataBaseName + '.data', 'r')
         data = []
 
         # Read file
@@ -27,15 +23,13 @@ class General:
     def newBaseShuffled(data, dataBaseName, order):
         random.shuffle(data)
 
-        current_dir = os.path.dirname(os.path.realpath(__file__))
-        file = open(join(current_dir, 'dataShuffled/' + dataBaseName + str(order) + '.data'), 'w')
+        file = open('dataShuffled/' + dataBaseName + str(order) + '.data', 'w')
         for k in data:
             file.write(k)
         file.close()
 
     def getData(dataBaseName, order):
-        current_dir = os.path.dirname(os.path.realpath(__file__))
-        file = open(join(current_dir, 'dataShuffled/' + dataBaseName + str(order) + '.data'), 'r')
+        file = open('dataShuffled/' + dataBaseName + str(order) + '.data', 'r')
         data = []
 
         # Read file
