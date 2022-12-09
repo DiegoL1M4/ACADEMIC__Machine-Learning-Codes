@@ -45,7 +45,7 @@ class QuadraticDiscriminant:
             mean = test[0][1]
             priori = test[2]
 
-            likelihood = General.quadraticDiscriminante(sample, covMatrix, mean)
+            likelihood = General.quadraticDiscriminante(sample, covMatrix, mean, priori)
 
             if(result == '' or probCalc < (likelihood * priori)):
                 probCalc = (likelihood * priori)

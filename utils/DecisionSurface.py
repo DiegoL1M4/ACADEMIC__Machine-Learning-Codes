@@ -36,9 +36,9 @@ class DecisionSurface:
         elif(algorithm == "BayesPosteriori"):
             y_pred = [[BayesPosteriori.predict(dataPart, x[:-1]) for x in x_in]]
         elif(algorithm == "LinearDiscr"):
-            y_pred = [[LinearDiscriminant.predict(dataPart, x[:-1]) for x in x_in]]
+            y_pred = [[LinearDiscriminant.predict(dataPart, x) for x in x_in]]
         elif(algorithm == "QuadraticDiscr"):
-            y_pred = [[QuadraticDiscriminant.predict(dataPart, x[:-1]) for x in x_in]]
+            y_pred = [[QuadraticDiscriminant.predict(dataPart, x) for x in x_in]]
 
         listNames = []
         for i, y in enumerate(y_pred[0]):

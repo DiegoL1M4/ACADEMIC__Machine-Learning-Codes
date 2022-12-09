@@ -28,8 +28,8 @@ valueDecision2 = 1
 decisionSurfaceActive = False # True | False
 confusionMatrixActive = True # True | False
 
-algorithm = "DMC" # KNN | DMC | Kmeans | BayesPosteriori | NaiveBayes | LinearDiscr | QuadraticDiscr
-dataBaseName = "dermatologyMod" # iris | column | artificial1 | breastMod | dermatologyMod | artificialII
+algorithm = "KNN" # KNN | DMC | Kmeans | BayesPosteriori | NaiveBayes | LinearDiscr | QuadraticDiscr
+dataBaseName = "iris" # iris | column | artificial1 | breastMod | dermatologyMod | artificialII
 
 # Generate shuffle bases
 if(generateDataFiles):
@@ -104,9 +104,9 @@ for unique in range(1):
             elif(algorithm == "BayesPosteriori"):
                 dataPartDecision = BayesPosteriori.train(dataDecision, dataBasePercentage)
             elif(algorithm == "LinearDiscr"):
-                sample[2] = LinearDiscriminant.predict(dataPart[0], sample[0])
+                dataPartDecision = LinearDiscriminant.train(dataDecision, dataBasePercentage)
             elif(algorithm == "QuadraticDiscr"):
-                sample[2] = QuadraticDiscriminant.predict(dataPart[0], sample[0])
+                dataPartDecision = QuadraticDiscriminant.train(dataDecision, dataBasePercentage)
 
             decisionSurface.plot(algorithm, dataPartDecision[0], General.twoCoordsData(data, valueDecision1, valueDecision2, 'dataFrame'), K_value_KNN)
 

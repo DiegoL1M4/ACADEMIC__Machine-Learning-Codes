@@ -131,7 +131,7 @@ class General:
 
         return total * math.pow(math.e, exp)
 
-    def linearDiscriminante(sample, matrix, mean):
+    def linearDiscriminante(sample, matrix, mean, p_ci):
         determinant = np.linalg.det(matrix)
 
         if(determinant == 0):
@@ -139,13 +139,14 @@ class General:
             matrix = matrix + (np.eye(len(matrix)) * 1e-10)
         
         inverse = np.linalg.inv(matrix)
+
+        p1 = (1/2) * np.dot( np.dot(sample, inverse) , mean)
+        p2 = (-1/2) * np.dot( np.dot(mean, inverse) , mean)
+        p3 = (1/2) * np.dot( np.dot(mean, inverse) , sample)
         
-        total = 1 / ( math.pow(2 * math.pi, len(sample) / 2) * np.power(determinant, 1 / 2) )
-        exp = -(1/2) * np.dot( np.dot((sample - mean), inverse) , (sample - mean))
+        return p1 + p2 + p3 + math.log(p_ci, math.e)
 
-        return total * math.pow(math.e, exp)
-
-    def quadraticDiscriminante(sample, matrix, mean):
+    def quadraticDiscriminante(sample, matrix, mean, p_ci):
         determinant = np.linalg.det(matrix)
 
         if(determinant == 0):
@@ -153,11 +154,13 @@ class General:
             matrix = matrix + (np.eye(len(matrix)) * 1e-10)
         
         inverse = np.linalg.inv(matrix)
-        
-        total = 1 / ( math.pow(2 * math.pi, len(sample) / 2) * np.power(determinant, 1 / 2) )
-        exp = -(1/2) * np.dot( np.dot((sample - mean), inverse) , (sample - mean))
 
-        return total * math.pow(math.e, exp)
+        p1 = (-1/2) * np.dot( np.dot(sample, inverse) , sample)
+        p2 = (1/2) * np.dot( np.dot(sample, inverse) , mean)
+        p3 = (1/2) * np.dot( np.dot(mean, inverse) , sample)
+        p4 = (-1/2) * np.dot( np.dot(mean, inverse) , mean)
+        
+        return p1 + p2 + p3 + p4 + math.log(p_ci, math.e) + p_ci
 
     def confusionMatrix(dataTrain, dataPredict):
         legends = []

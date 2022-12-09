@@ -24,15 +24,19 @@ class LinearDiscriminant:
         typing = dataBaseSorted[0][1]
         dataTrained = []
         collection = []
+        allCoords = []
+
+        for coords in dataBaseSorted:
+            allCoords.append(coords[0])
 
         for coords in dataBaseSorted:
             if(typing != coords[1]):
-                dataTrained.append([[np.cov(collection, rowvar=False), np.mean(collection, axis=0)], typing, len(collection) / total])
+                dataTrained.append([[np.cov(allCoords, rowvar=False), np.mean(collection, axis=0)], typing, len(collection) / total])
                 typing = coords[1]
                 collection = []
 
             collection.append(coords[0])
-        dataTrained.append([[np.cov(collection, rowvar=False), np.mean(collection, axis=0)], typing, len(collection) / total])
+        dataTrained.append([[np.cov(allCoords, rowvar=False), np.mean(collection, axis=0)], typing, len(collection) / total])
 
         return [dataTrained, dataToPredict]
             
@@ -45,7 +49,7 @@ class LinearDiscriminant:
             mean = test[0][1]
             priori = test[2]
 
-            likelihood = General.linearDiscriminante(sample, covMatrix, mean)
+            likelihood = General.linearDiscriminante(sample, covMatrix, mean, priori)
 
             if(result == '' or probCalc < (likelihood * priori)):
                 probCalc = (likelihood * priori)
