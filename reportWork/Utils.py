@@ -31,17 +31,15 @@ class Utils:
 
         return X_norm
 
-    def plotDistribution(column, feature_name, distr_name):
-        distribution = getattr(scipy.stats, distr_name)
-        distri_params = distribution.fit(column)
-        new_distr = distribution(*distri_params)
-
+    def plotDistribution(column, feature, distr):
+        distribution = getattr(scipy.stats, distr)
+        params = distribution.fit(column)
+        new = distribution(*params)
         x = np.linspace(0, 1, 100)
         _, ax = plt.subplots(1, 2)
-
-        plt.suptitle(feature_name + ' - ' + distr_name)
+        plt.suptitle(feature + ' - ' + distr)
         sns.histplot(x=column, ax=ax[0])
-        sns.lineplot(x=x, y=new_distr.pdf(x), ax=ax[1])
+        sns.lineplot(x=x, y=new.pdf(x), ax=ax[1])
         plt.show()
 
     def hitRate(dataList):
@@ -117,7 +115,7 @@ class Utils:
         random.shuffle(data)
         return data
 
-    def getDataBasePandas(dataBaseName):
+    def getFromFile(dataBaseName):
         file = open('data/' + dataBaseName + '.data', 'r')
         data = []
 
@@ -143,6 +141,11 @@ class Utils:
             row = file.readline()
         file.close()
 
+        return data
+
+    def getDataBasePandas(dataBaseName):
+        data = Utils.getFromFile(dataBaseName)
+
         if(dataBaseName == "iris"):
             columns = [
                 'sepal_length',
@@ -162,6 +165,88 @@ class Utils:
                 'class'
             ]
 
+        data = pd.DataFrame(data, columns=columns)
+        data = Utils.min_max_normalization(data.drop(data.columns[-1:], axis=1))
+
+        return data
+
+    def increseDatasetIris(dataBaseName):
+        data = Utils.getFromFile(dataBaseName)
+        countVector = [[0, "Iris-setosa", []], [0, "Iris-versicolor", []], [0, "Iris-virginica", []]]
+
+        for sample in data:
+            if(sample[4] == "Iris-setosa"):
+                countVector[0][0] += 1
+                countVector[0][2].append(sample)
+            if(sample[4] == "Iris-versicolor"):
+                countVector[1][0] += 1
+                countVector[1][2].append(sample)
+            if(sample[4] == "Iris-virginica"):
+                countVector[2][0] += 1
+                countVector[2][2].append(sample)
+
+        for count in countVector:
+            minVector = min(count[2])
+            maxVector = max(count[2])
+            for newSample in range(count[0], 300):
+                data.append([
+                    round(np.random.uniform(minVector[0], maxVector[0]), 1), 
+                    round(np.random.uniform(minVector[1], maxVector[1]), 1),
+                    round(np.random.uniform(minVector[2], maxVector[2]), 1), 
+                    round(np.random.uniform(minVector[3], maxVector[3]), 1), 
+                    count[1]
+                ])
+
+        columns = [
+            'sepal_length',
+            'sepal_width', 
+            'petal_length', 
+            'petal_width', 
+            'class'
+        ]
+        data = pd.DataFrame(data, columns=columns)
+        data = Utils.min_max_normalization(data.drop(data.columns[-1:], axis=1))
+
+        return data
+
+    def increseDatasetColumn(dataBaseName):
+        data = Utils.getFromFile(dataBaseName)
+        countVector = [[0, "DH", []], [0, "SL", []], [0, "NO", []]]
+
+        for sample in data:
+            if(sample[6] == "DH"):
+                countVector[0][0] += 1
+                countVector[0][2].append(sample)
+            if(sample[6] == "SL"):
+                countVector[1][0] += 1
+                countVector[1][2].append(sample)
+            if(sample[6] == "NO"):
+                countVector[2][0] += 1
+                countVector[2][2].append(sample)
+
+        for count in countVector:
+            minVector = min(count[2])
+            maxVector = max(count[2])
+            for newSample in range(count[0], 300):
+                data.append([
+                    round(np.random.uniform(minVector[0], maxVector[0]), 1),
+                    round(np.random.uniform(minVector[1], maxVector[1]), 1),
+                    round(np.random.uniform(minVector[2], maxVector[2]), 1),
+                    round(np.random.uniform(minVector[3], maxVector[3]), 1),
+                    round(np.random.uniform(minVector[4], maxVector[4]), 1),
+                    round(np.random.uniform(minVector[5], maxVector[5]), 1), 
+                    count[1]
+                ])
+
+        columns = [
+            'pelvic_incidence', 
+            'pelvic_tilt', 
+            'lumbar_lordosis_angle', 
+            'sacral_slope', 
+            'pelvic_radius', 
+            'degree_spondylolisthesis',
+            'class'
+        ]
         data = pd.DataFrame(data, columns=columns)
         data = Utils.min_max_normalization(data.drop(data.columns[-1:], axis=1))
 

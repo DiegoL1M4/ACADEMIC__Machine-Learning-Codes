@@ -1,5 +1,4 @@
 import sys, os
-import pandas as pd
 
 if not sys.path[0] == os.path.abspath('..'):
     sys.path.insert(0, os.path.abspath('..'))
@@ -8,21 +7,31 @@ from Utils import Utils
 from Functions import Functions
 
 # Execution Variables
+hitRateList = []
 dataBasePercentage = 0.8
 totalExec = 20
-
-confusionMatrixActive = False # True | False
-
-dataBaseName = "column" # iris | column
 distributions = ['laplace', 'norm', 'gamma', 'lognorm', 'norm', 'lognorm']
 
-hitRateList = []
+#### SIMULATION CONFIGURATION ####
+dataBaseName = "iris"     # iris | column
+showNormalPlots = True    # True | False
+showPlots300 = True       # True | False
 
 # Column Distributions
 data = Utils.getDataBasePandas(dataBaseName)
 
-for i, feature in enumerate(data.columns):
-    Utils.plotDistribution(data[feature], feature, distributions[i])
+if(showNormalPlots):
+    for i, feature in enumerate(data.columns):
+        Utils.plotDistribution(data[feature], feature, distributions[i])
+
+if(dataBaseName == "iris"):
+    data300 = Utils.increseDatasetIris(dataBaseName)
+else:
+    data300 = Utils.increseDatasetColumn(dataBaseName)
+
+if(showPlots300):
+    for i, feature in enumerate(data300.columns):
+        Utils.plotDistribution(data300[feature], feature, distributions[i])
 
 # Predict Execution
 for k in range(totalExec):
@@ -36,12 +45,7 @@ for k in range(totalExec):
     # Test
     for sample in dataPart[1]:
         sample[2] = Functions.naivePredict(dataPart[0], sample[0])
-        
         predictResult.append(sample)
-
-    # Confusion Matrix
-    # if(confusionMatrixActive):
-    #     General.plotConfusionMatrix(General.confusionMatrix(dataPart[0], predictResult), k)
 
     hitRateList.append(Utils.hitRate(predictResult))
     

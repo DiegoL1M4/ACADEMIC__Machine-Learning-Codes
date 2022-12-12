@@ -12,8 +12,11 @@ from Utils import Utils
 data = Utils.getCoordsMatrix("iris")
 dataAltered = Utils.copyMatrix(data, 1)
 
+#### SIMULATION CONFIGURATION ####
+percentage = 0.1 # 0.1 | 0.3
+
 attributesSize = len(data) * len(data[0])
-targetAmount = int(attributesSize * 0.1)
+targetAmount = int(attributesSize * percentage)
 
 # Delete Values
 deleted = []

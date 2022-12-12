@@ -45,7 +45,7 @@ class Functions:
         probCalc = 0
 
         for test in dataBase:
-            likelihood = Functions.PDF(sample, test)
+            likelihood = Functions.likelihood(sample, test)
             priori = test[2]
 
             if(result == '' or probCalc < (likelihood * priori)):
@@ -54,7 +54,7 @@ class Functions:
             
         return result
 
-    def PDF(sample, classTrain):
+    def likelihood(sample, classTrain):
         result = 1
         for k in range(len(sample)):
             mean = classTrain[0][0][k]
